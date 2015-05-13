@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A3B91F321B034DA1008543E3 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A3B91F311B034DA1008543E3 /* background.jpg */; };
 		A3F51D651B025E1F007F09D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F51D641B025E1F007F09D1 /* AppDelegate.swift */; };
-		A3F51D671B025E1F007F09D1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F51D661B025E1F007F09D1 /* ViewController.swift */; };
-		A3F51D6A1B025E1F007F09D1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3F51D681B025E1F007F09D1 /* Main.storyboard */; };
 		A3F51D6C1B025E1F007F09D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3F51D6B1B025E1F007F09D1 /* Images.xcassets */; };
 		A3F51D6F1B025E1F007F09D1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A3F51D6D1B025E1F007F09D1 /* LaunchScreen.xib */; };
 		A3F51D7B1B025E1F007F09D1 /* DVActionSheetExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F51D7A1B025E1F007F09D1 /* DVActionSheetExampleTests.swift */; };
+		A3F51D871B025EE0007F09D1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F51D851B025EE0007F09D1 /* ViewController.swift */; };
+		A3F51D881B025EE0007F09D1 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A3F51D861B025EE0007F09D1 /* ViewController.xib */; };
+		A3F51D8A1B025EF5007F09D1 /* DVActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F51D891B025EF5007F09D1 /* DVActionSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,16 +28,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A3B91F311B034DA1008543E3 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		A3F51D5F1B025E1F007F09D1 /* DVActionSheetExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DVActionSheetExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3F51D631B025E1F007F09D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A3F51D641B025E1F007F09D1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A3F51D661B025E1F007F09D1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		A3F51D691B025E1F007F09D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A3F51D6B1B025E1F007F09D1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A3F51D6E1B025E1F007F09D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		A3F51D741B025E1F007F09D1 /* DVActionSheetExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DVActionSheetExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3F51D791B025E1F007F09D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A3F51D7A1B025E1F007F09D1 /* DVActionSheetExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DVActionSheetExampleTests.swift; sourceTree = "<group>"; };
+		A3F51D851B025EE0007F09D1 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A3F51D861B025EE0007F09D1 /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
+		A3F51D891B025EF5007F09D1 /* DVActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVActionSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,8 +82,8 @@
 			isa = PBXGroup;
 			children = (
 				A3F51D641B025E1F007F09D1 /* AppDelegate.swift */,
-				A3F51D661B025E1F007F09D1 /* ViewController.swift */,
-				A3F51D681B025E1F007F09D1 /* Main.storyboard */,
+				A3F51D891B025EF5007F09D1 /* DVActionSheet.swift */,
+				A3F51D841B025ECC007F09D1 /* Classes */,
 				A3F51D6B1B025E1F007F09D1 /* Images.xcassets */,
 				A3F51D6D1B025E1F007F09D1 /* LaunchScreen.xib */,
 				A3F51D621B025E1F007F09D1 /* Supporting Files */,
@@ -110,6 +114,16 @@
 				A3F51D791B025E1F007F09D1 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A3F51D841B025ECC007F09D1 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				A3F51D851B025EE0007F09D1 /* ViewController.swift */,
+				A3F51D861B025EE0007F09D1 /* ViewController.xib */,
+				A3B91F311B034DA1008543E3 /* background.jpg */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -161,6 +175,7 @@
 				TargetAttributes = {
 					A3F51D5E1B025E1F007F09D1 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = KL85A32SD8;
 					};
 					A3F51D731B025E1F007F09D1 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -192,8 +207,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3F51D6A1B025E1F007F09D1 /* Main.storyboard in Resources */,
 				A3F51D6F1B025E1F007F09D1 /* LaunchScreen.xib in Resources */,
+				A3B91F321B034DA1008543E3 /* background.jpg in Resources */,
+				A3F51D881B025EE0007F09D1 /* ViewController.xib in Resources */,
 				A3F51D6C1B025E1F007F09D1 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -212,8 +228,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3F51D671B025E1F007F09D1 /* ViewController.swift in Sources */,
+				A3F51D871B025EE0007F09D1 /* ViewController.swift in Sources */,
 				A3F51D651B025E1F007F09D1 /* AppDelegate.swift in Sources */,
+				A3F51D8A1B025EF5007F09D1 /* DVActionSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,14 +253,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		A3F51D681B025E1F007F09D1 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A3F51D691B025E1F007F09D1 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		A3F51D6D1B025E1F007F09D1 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -342,9 +351,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = DVActionSheetExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -352,9 +364,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = DVActionSheetExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -411,6 +426,7 @@
 				A3F51D801B025E1F007F09D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A3F51D811B025E1F007F09D1 /* Build configuration list for PBXNativeTarget "DVActionSheetExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +435,7 @@
 				A3F51D831B025E1F007F09D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
