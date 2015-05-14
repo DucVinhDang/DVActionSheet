@@ -9,7 +9,11 @@
 import UIKit
 
 @objc protocol DVActionSheetDelegate {
-    optional func dvActionSheet(dvActionSheet: DVActionSheet, didClickButtonAtIndex: Int)
+    optional func dvActionSheetWillAppear(#dvActionSheet: DVActionSheet)
+    optional func dvActionSheetDidAppear(#dvActionSheet: DVActionSheet)
+    optional func dvActionSheetWillDisappear(#dvActionSheet: DVActionSheet)
+    optional func dvActionSheetDidDisappear(#dvActionSheet: DVActionSheet)
+    optional func dvActionSheet(#dvActionSheet: DVActionSheet, didClickButtonAtIndex: Int)
 }
 
 class DVActionSheetButton: UIButton {
@@ -38,6 +42,8 @@ class DVActionSheetButton: UIButton {
     var dvCornerRadius: CGFloat? {
         willSet(value) { self.layer.cornerRadius = value! }
     }
+    
+    var index: Int?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -103,10 +109,13 @@ class DVActionSheet: UIViewController {
     let buttonCornerRadius: CGFloat = 0
     let distance: CGFloat = 5
     
+    var existDestructiveButton = true
+    
     // MARK: - Init Methods
     
     init(title: String, delegate: DVActionSheetDelegate?, cancelButtonTitle: String, destructiveButtonTitle: String) {
         super.init(nibName: nil, bundle: nil)
+        addActionSheetWithTitle(title: title, delegate: delegate, cancelButtonTitle: cancelButtonTitle, destructiveButtonTitle: destructiveButtonTitle)
     }
     
     init(title: String, delegate: DVActionSheetDelegate?, cancelButtonTitle: String, destructiveButtonTitle: String, otherButtonTitles: [String]?) {
@@ -128,7 +137,6 @@ class DVActionSheet: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         setupView()
-//        setupContainerView()
     }
 
     override func didReceiveMemoryWarning() {
@@ -147,10 +155,14 @@ class DVActionSheet: UIViewController {
     // MARK: - Add Buttons Methods
     
     private func addActionSheetWithTitle(#title: String, delegate: DVActionSheetDelegate?, cancelButtonTitle: String, destructiveButtonTitle: String) {
+        addActionSheetWithTitle(title: title, delegate: delegate, cancelButtonTitle: cancelButtonTitle, destructiveButtonTitle: destructiveButtonTitle, otherButtonTitles: nil)
     }
     
     private func addActionSheetWithTitle(#title: String, delegate: DVActionSheetDelegate?, cancelButtonTitle: String, destructiveButtonTitle: String, otherButtonTitles: [String]?) {
         if !destructiveButtonTitle.isEmpty { addDestructiveButtonWithTitle(title: destructiveButtonTitle) }
+        else { existDestructiveButton = false }
+        
+        if delegate != nil { self.delegate = delegate }
         if otherButtonTitles != nil {
             for title in otherButtonTitles! {
                 addNormalButtonWithTitle(title: title, titleColor: buttonTitleColor, backgroundColor: buttonBackgroundColor)
@@ -165,6 +177,8 @@ class DVActionSheet: UIViewController {
         button.center = CGPointMake(deviceWidth/2, deviceHeight + buttonHeight/2)
         button.dvActionSheetButtonType = .Normal
         button.setAttributesForNormalButton(title: title, titleColor: buttonTitleColor, backgroundColor: buttonBackgroundColor)
+        button.index = existDestructiveButton ? buttonArray.count : buttonArray.count + 1
+        button.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button)
         buttonArray.append(button)
     }
@@ -174,7 +188,8 @@ class DVActionSheet: UIViewController {
         button.center = CGPointMake(deviceWidth/2, deviceHeight + buttonHeight/2)
         button.dvActionSheetButtonType = .Cancel
         button.setAttributesForCancelButton(title: title)
-        button.addTarget(self, action: Selector("cancelButtonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        button.index = existDestructiveButton ? buttonArray.count : buttonArray.count + 1
+        button.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button)
         buttonArray.append(button)
     }
@@ -184,6 +199,8 @@ class DVActionSheet: UIViewController {
         button.center = CGPointMake(deviceWidth/2, deviceHeight + buttonHeight/2)
         button.dvActionSheetButtonType = .Destructive
         button.setAttributesForDestructiveButton(title: title)
+        button.index = buttonArray.count
+        button.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button)
         buttonArray.append(button)
     }
@@ -191,6 +208,7 @@ class DVActionSheet: UIViewController {
     // MARK: - Animation Methods
     
     func show(#target: UIViewController, style: DVActionSheetPresentStyle?) {
+        delegate?.dvActionSheetWillAppear!(dvActionSheet: self)
         if actionSheetState == .Show { return }
         target.addChildViewController(self)
         target.view.addSubview(self.view)
@@ -201,15 +219,9 @@ class DVActionSheet: UIViewController {
     }
     
     private func hide() {
+        delegate?.dvActionSheetWillDisappear!(dvActionSheet: self)
         if actionSheetState == .Hide { return }
-        hideAllButtons() { finished in
-            self.actionSheetState = .Hide
-            self.buttonArray.removeAll(keepCapacity: false)
-            self.view.removeFromSuperview()
-            self.removeFromParentViewController()
-            self.didMoveToParentViewController(nil)
-        }
-
+        hideAllButtons()
     }
     
     private func showAllButtons() {
@@ -217,6 +229,11 @@ class DVActionSheet: UIViewController {
         view.alpha = 0
         UIView.animateWithDuration(0.2, animations: { self.view.alpha = 1 })
         if presentStyle == .DropUpFromBottom { buttonArray = buttonArray.reverse() }
+        
+        var slideStartPoint: CGFloat = 0
+        if presentStyle == .SlideFromLeft || presentStyle == .SlideFromRight {
+            slideStartPoint = (deviceHeight - (CGFloat(buttonArray.count) * buttonHeight + CGFloat(buttonArray.count-1) * distance)) / 2
+        }
         
         for button in buttonArray {
             switch(presentStyle) {
@@ -229,12 +246,12 @@ class DVActionSheet: UIViewController {
                 animateButtonToNewPosition(button, pos: CGPoint(x: button.center.x, y: deviceHeight - self.distance*(count+1) - self.buttonHeight/2 - self.buttonHeight*count), show: true)
                 
             case .SlideFromLeft:
-                button.center = CGPoint(x: -buttonWidth/2, y: distance + buttonHeight/2)
-                animateButtonToNewPosition(button, pos: CGPoint(x: distance + buttonWidth/2, y: self.distance*(count+1) + self.buttonHeight/2 + self.buttonHeight*count), show: true)
+                button.center = CGPoint(x: -buttonWidth/2, y: slideStartPoint + buttonHeight/2 + buttonHeight*count + distance*count)
+                animateButtonToNewPosition(button, pos: CGPoint(x: distance + buttonWidth/2, y: button.center.y), show: true)
                 
             case .SlideFromRight:
-                button.center = CGPoint(x: deviceWidth + buttonWidth/2, y: distance + buttonHeight/2)
-                animateButtonToNewPosition(button, pos: CGPoint(x: deviceWidth - distance - buttonWidth/2, y: self.distance*(count+1) + self.buttonHeight/2 + self.buttonHeight*count), show: true)
+                button.center = CGPoint(x: deviceWidth + buttonWidth/2, y: slideStartPoint + buttonHeight/2 + buttonHeight*count + distance*count)
+                animateButtonToNewPosition(button, pos: CGPoint(x: deviceWidth - distance - buttonWidth/2, y: button.center.y), show: true)
             default:
                 break
             }
@@ -242,10 +259,10 @@ class DVActionSheet: UIViewController {
             count++
         }
         actionSheetState = .Show
+        delegate?.dvActionSheetDidAppear!(dvActionSheet: self)
     }
     
     private func hideAllButtons(completion: ((Bool) -> Void)! = nil) {
-        UIView.animateWithDuration(0.3, animations: { self.view.alpha = 0 })
         for button in buttonArray {
             switch(presentStyle) {
             case .DropDownFromTop:
@@ -253,14 +270,24 @@ class DVActionSheet: UIViewController {
             case .DropUpFromBottom:
                 animateButtonToNewPosition(button, pos: CGPoint(x: button.center.x, y: deviceHeight + buttonHeight/2), show: false)
             case .SlideFromLeft:
-                animateButtonToNewPosition(button, pos: CGPoint(x: -buttonWidth/2, y: distance + buttonHeight/2), show: false)
+                animateButtonToNewPosition(button, pos: CGPoint(x: -buttonWidth/2, y: button.center.y), show: false)
             case .SlideFromRight:
-                animateButtonToNewPosition(button, pos: CGPoint(x: deviceWidth + buttonWidth/2, y: distance + buttonHeight/2), show: false)
+                animateButtonToNewPosition(button, pos: CGPoint(x: deviceWidth + buttonWidth/2, y: button.center.y), show: false)
             default:
                 break
             }
         }
-        completion
+        
+        UIView.animateWithDuration(0.3, animations: {
+                self.view.alpha = 0
+            }, completion: { finished in
+                self.actionSheetState = .Hide
+                self.buttonArray.removeAll(keepCapacity: false)
+                self.view.removeFromSuperview()
+                self.removeFromParentViewController()
+                self.didMoveToParentViewController(nil)
+                self.delegate?.dvActionSheetDidDisappear!(dvActionSheet: self)
+        })
     }
     
     private func animateButtonToNewPosition(button: DVActionSheetButton, pos: CGPoint, show: Bool) {
@@ -281,10 +308,20 @@ class DVActionSheet: UIViewController {
         currentView.addSubview(blurV)
     }
     
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
+    }
+    
     // MARK: - Button Methods
     
-    func cancelButtonAction(button: DVActionSheetButton) {
-        hide()
+    func buttonAction(button: DVActionSheetButton) {
+        if button.index == buttonArray.count-1 { hide() }
+        delegate?.dvActionSheet!(dvActionSheet: self, didClickButtonAtIndex: button.index!)
     }
 
     /*
