@@ -92,7 +92,7 @@ class DVActionSheet: UIViewController {
         case Hide
     }
 
-    var delegate: DVActionSheetDelegate?
+    weak var delegate: DVActionSheetDelegate?
     var presentStyle = DVActionSheetPresentStyle.DropUpFromBottom
     var actionSheetState = DVActionSheetState.Hide
     var buttonArray = [DVActionSheetButton]()
