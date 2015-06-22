@@ -97,6 +97,9 @@ class DVActionSheet: UIViewController {
     var actionSheetState = DVActionSheetState.Hide
     var buttonArray = [DVActionSheetButton]()
     
+    weak var target: UIViewController?
+    weak var shadowView: UIView?
+    
     let deviceWidth = UIScreen.mainScreen().bounds.width
     let deviceHeight = UIScreen.mainScreen().bounds.height
     let buttonWidth: CGFloat = UIScreen.mainScreen().bounds.width - 10
@@ -149,7 +152,8 @@ class DVActionSheet: UIViewController {
     private func setupView() {
         view.frame = UIScreen.mainScreen().bounds
         view.backgroundColor = UIColor.clearColor()
-        view.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        view.setTranslatesAutoresizingMaskIntoConstraints(true)
+        view.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
     }
     
     // MARK: - Add Buttons Methods
@@ -213,7 +217,22 @@ class DVActionSheet: UIViewController {
         target.addChildViewController(self)
         target.view.addSubview(self.view)
         didMoveToParentViewController(target)
-        addVibrancyEffectToView(view)
+        //addVibrancyEffectToView(view)
+        
+        var vView = UIView()
+        target.view.addSubview(vView)
+        
+        vView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Leading, relatedBy: .Equal, toItem: target.view, attribute: .Leading, multiplier: 1.0, constant: 0.0))
+        target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Trailing, relatedBy: .Equal, toItem: target.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0))
+        target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Top, relatedBy: .Equal, toItem: target.view, attribute: .Top, multiplier: 1.0, constant: 0.0))
+        target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Bottom, relatedBy: .Equal, toItem: target.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
+        vView.backgroundColor = UIColor.blackColor()
+        //addVibrancyEffectToView(vView)
+        self.shadowView = vView
+        target.view.bringSubviewToFront(view)
+        self.target = target
+        
         presentStyle = style!
         showAllButtons()
     }
@@ -238,6 +257,7 @@ class DVActionSheet: UIViewController {
         for button in buttonArray {
             switch(presentStyle) {
             case .DropDownFromTop:
+                
                 button.center = CGPoint(x: button.center.x, y: -buttonHeight/2)
                 animateButtonToNewPosition(button, pos: CGPoint(x: button.center.x, y: self.distance*(count+1) + self.buttonHeight/2 + self.buttonHeight*count), show: true)
 
@@ -291,10 +311,32 @@ class DVActionSheet: UIViewController {
     }
     
     private func animateButtonToNewPosition(button: DVActionSheetButton, pos: CGPoint, show: Bool) {
+        if show { shadowView?.alpha = 0 }
         UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.65, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: {
             button.center = pos
+            if show { self.shadowView?.alpha = 0.6 }
+            else { self.shadowView?.alpha = 0 }
             }, completion: { finished in
                 if !show { button.removeFromSuperview() }
+                else {
+                    button.setTranslatesAutoresizingMaskIntoConstraints(false)
+                    self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Left , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: self.distance))
+                    self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Right , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: -self.distance))
+                    self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Height , relatedBy: .Equal, toItem: nil, attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: self.buttonHeight))
+                    
+                    if self.presentStyle == .DropDownFromTop {
+                        var dis = CGRectGetMinY(button.frame)
+                        self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: dis))
+                    } else if self.presentStyle == .DropUpFromBottom {
+                        var dis = self.deviceHeight - CGRectGetMaxY(button.frame)
+                        self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Bottom , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: dis - self.buttonHeight - self.distance*3))
+                    } else {
+                        var dis = CGRectGetMinY(button.frame)
+                        self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: dis))
+                    }
+                    
+                }
+                
         })
     }
     
