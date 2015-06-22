@@ -103,7 +103,7 @@ class DVActionSheet: UIViewController {
     let deviceWidth = UIScreen.mainScreen().bounds.width
     let deviceHeight = UIScreen.mainScreen().bounds.height
     let buttonWidth: CGFloat = UIScreen.mainScreen().bounds.width - 10
-    let buttonHeight: CGFloat = 43
+    let buttonHeight: CGFloat = 55
     
     let buttonFont = UIFont(name: "Helvetica", size: 16)
     let buttonTitleColor = UIColor.whiteColor()
@@ -318,26 +318,29 @@ class DVActionSheet: UIViewController {
             else { self.shadowView?.alpha = 0 }
             }, completion: { finished in
                 if !show { button.removeFromSuperview() }
-                else {
-                    button.setTranslatesAutoresizingMaskIntoConstraints(false)
-                    self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Left , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: self.distance))
-                    self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Right , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: -self.distance))
-                    self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Height , relatedBy: .Equal, toItem: nil, attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: self.buttonHeight))
-                    
-                    if self.presentStyle == .DropDownFromTop {
-                        var dis = CGRectGetMinY(button.frame)
-                        self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: dis))
-                    } else if self.presentStyle == .DropUpFromBottom {
-                        var dis = self.deviceHeight - CGRectGetMaxY(button.frame)
-                        self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Bottom , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: dis - self.buttonHeight - self.distance*3))
-                    } else {
-                        var dis = CGRectGetMinY(button.frame)
-                        self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: dis))
-                    }
-                    
-                }
-                
+                else { self.addConstraintForButton(button: button, animationType: self.presentStyle) }
         })
+    }
+    
+    // MARK: - Auto Layout Methods
+    
+    func addConstraintForButton(#button: DVActionSheetButton, animationType: DVActionSheetPresentStyle ) {
+        button.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Left , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: self.distance))
+        self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Right , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: -self.distance))
+        self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Height , relatedBy: .Equal, toItem: nil, attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: self.buttonHeight))
+        
+        if animationType == .DropDownFromTop {
+            var dis = CGRectGetMinY(button.frame)
+            self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: dis))
+        } else if animationType == .DropUpFromBottom {
+            var dis = CGRectGetMaxY(button.frame) - self.deviceHeight
+            self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Bottom , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: dis))
+        } else {
+            var dis = CGRectGetMinY(button.frame)
+            self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: dis))
+        }
+
     }
     
     // MARK: - Supporting Methods
