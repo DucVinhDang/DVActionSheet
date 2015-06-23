@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="15A178w" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ViewController" customModule="DVActionSheetExample" customModuleProvider="target">
@@ -16,14 +16,17 @@
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="8JM-Z8-bHz">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <animations/>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JKb-lD-dzY">
-                    <rect key="frame" x="202" y="138" width="197" height="46"/>
-                    <color key="backgroundColor" red="1" green="0.44803443140758126" blue="0.48599742775963783" alpha="1" colorSpace="calibratedRGB"/>
+                    <rect key="frame" x="202" y="182" width="197" height="46"/>
+                    <animations/>
+                    <color key="backgroundColor" red="0.59343835419232183" green="0.43285181311148913" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="197" id="Omw-0C-1SB"/>
-                        <constraint firstAttribute="height" constant="46" id="hWH-Ac-ahi"/>
+                        <constraint firstAttribute="width" constant="197" id="Xwx-Jy-Gma"/>
+                        <constraint firstAttribute="height" constant="46" id="pD9-GO-MS7"/>
                     </constraints>
+                    <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="15"/>
                     <state key="normal" title="Bottom">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -33,12 +36,14 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OSf-S9-1iq">
-                    <rect key="frame" x="202" y="201" width="197" height="46"/>
-                    <color key="backgroundColor" red="1" green="0.44803443139999999" blue="0.48599742779999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <rect key="frame" x="202" y="245" width="197" height="46"/>
+                    <animations/>
+                    <color key="backgroundColor" red="0.59343835419232183" green="0.43285181311148913" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="46" id="2qc-NM-9mY"/>
-                        <constraint firstAttribute="width" constant="197" id="Uzt-Nl-g9U"/>
+                        <constraint firstAttribute="width" constant="197" id="M3W-Ir-5IZ"/>
+                        <constraint firstAttribute="height" constant="46" id="eYV-xq-yuP"/>
                     </constraints>
+                    <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="15"/>
                     <state key="normal" title="Top">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -48,12 +53,14 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JgO-JN-dAj">
-                    <rect key="frame" x="202" y="265" width="197" height="46"/>
-                    <color key="backgroundColor" red="1" green="0.44803443139999999" blue="0.48599742779999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <rect key="frame" x="202" y="309" width="197" height="46"/>
+                    <animations/>
+                    <color key="backgroundColor" red="0.59343835419232183" green="0.43285181311148913" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="197" id="AN3-7V-VIJ"/>
-                        <constraint firstAttribute="height" constant="46" id="yCg-Zr-ck1"/>
+                        <constraint firstAttribute="width" constant="197" id="9jK-aq-QiK"/>
+                        <constraint firstAttribute="height" constant="46" id="TAA-8S-a5E"/>
                     </constraints>
+                    <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="15"/>
                     <state key="normal" title="Left">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -63,12 +70,14 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WaT-Pc-7rL">
-                    <rect key="frame" x="202" y="328" width="197" height="46"/>
-                    <color key="backgroundColor" red="1" green="0.44803443139999999" blue="0.48599742779999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <rect key="frame" x="202" y="372" width="197" height="46"/>
+                    <animations/>
+                    <color key="backgroundColor" red="0.59343835419232183" green="0.43285181311148913" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="46" id="Lou-6Y-q8T"/>
-                        <constraint firstAttribute="width" constant="197" id="mKZ-Mp-hNz"/>
+                        <constraint firstAttribute="height" constant="46" id="rvh-aI-B9E"/>
+                        <constraint firstAttribute="width" constant="197" id="ujo-yK-vgq"/>
                     </constraints>
+                    <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="15"/>
                     <state key="normal" title="Right">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -78,30 +87,26 @@
                     </connections>
                 </button>
             </subviews>
+            <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="centerX" secondItem="JgO-JN-dAj" secondAttribute="centerX" id="3ea-QU-776"/>
-                <constraint firstItem="WaT-Pc-7rL" firstAttribute="width" secondItem="JgO-JN-dAj" secondAttribute="width" id="C9N-5J-B9U"/>
-                <constraint firstItem="OSf-S9-1iq" firstAttribute="top" secondItem="JKb-lD-dzY" secondAttribute="bottom" constant="17" id="Lir-Jh-7Cw"/>
-                <constraint firstItem="JgO-JN-dAj" firstAttribute="top" secondItem="OSf-S9-1iq" secondAttribute="bottom" constant="18" id="Mj6-aa-7Nj"/>
-                <constraint firstAttribute="bottom" secondItem="8JM-Z8-bHz" secondAttribute="bottom" id="PIi-Le-Gim"/>
-                <constraint firstItem="8JM-Z8-bHz" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="UdF-sG-HUI"/>
-                <constraint firstAttribute="trailing" secondItem="8JM-Z8-bHz" secondAttribute="trailing" id="Y6W-tz-2ou"/>
-                <constraint firstItem="WaT-Pc-7rL" firstAttribute="width" secondItem="OSf-S9-1iq" secondAttribute="width" id="aRK-xn-6JA"/>
-                <constraint firstItem="WaT-Pc-7rL" firstAttribute="width" secondItem="JKb-lD-dzY" secondAttribute="width" id="aXJ-wk-Q1t"/>
-                <constraint firstItem="WaT-Pc-7rL" firstAttribute="height" secondItem="JKb-lD-dzY" secondAttribute="height" id="gSx-vq-fYb"/>
-                <constraint firstAttribute="centerX" secondItem="OSf-S9-1iq" secondAttribute="centerX" id="gmc-YR-CiX"/>
-                <constraint firstItem="JKb-lD-dzY" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="138" id="icw-AT-5lL"/>
-                <constraint firstAttribute="centerX" secondItem="WaT-Pc-7rL" secondAttribute="centerX" id="qcr-7R-8qB"/>
-                <constraint firstItem="WaT-Pc-7rL" firstAttribute="height" secondItem="JgO-JN-dAj" secondAttribute="height" id="rpS-u6-1P0"/>
-                <constraint firstItem="WaT-Pc-7rL" firstAttribute="top" secondItem="JgO-JN-dAj" secondAttribute="bottom" constant="17" id="utf-nF-3L3"/>
-                <constraint firstItem="8JM-Z8-bHz" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="v3z-Ad-m6W"/>
-                <constraint firstItem="WaT-Pc-7rL" firstAttribute="height" secondItem="OSf-S9-1iq" secondAttribute="height" id="wKk-Vw-j64"/>
-                <constraint firstAttribute="centerX" secondItem="JKb-lD-dzY" secondAttribute="centerX" id="yzC-Ri-qyQ"/>
+                <constraint firstAttribute="bottom" secondItem="8JM-Z8-bHz" secondAttribute="bottom" id="7f7-2O-5e8"/>
+                <constraint firstAttribute="centerY" secondItem="JKb-lD-dzY" secondAttribute="centerY" constant="95" id="869-sX-XOP"/>
+                <constraint firstAttribute="centerX" secondItem="JgO-JN-dAj" secondAttribute="centerX" id="9Av-Ol-PCD"/>
+                <constraint firstItem="8JM-Z8-bHz" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="9qU-qX-3PI"/>
+                <constraint firstAttribute="centerX" secondItem="OSf-S9-1iq" secondAttribute="centerX" id="Ich-gg-uon"/>
+                <constraint firstAttribute="centerY" secondItem="JKb-lD-dzY" secondAttribute="centerY" constant="95" id="K5e-qM-lYa"/>
+                <constraint firstItem="WaT-Pc-7rL" firstAttribute="top" secondItem="JgO-JN-dAj" secondAttribute="bottom" constant="17" id="O2y-yc-XzY"/>
+                <constraint firstItem="8JM-Z8-bHz" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="PFp-5B-NYv"/>
+                <constraint firstAttribute="centerX" secondItem="JKb-lD-dzY" secondAttribute="centerX" id="Tmc-dI-Xub"/>
+                <constraint firstAttribute="trailing" secondItem="8JM-Z8-bHz" secondAttribute="trailing" id="aTc-gE-wel"/>
+                <constraint firstItem="JgO-JN-dAj" firstAttribute="top" secondItem="OSf-S9-1iq" secondAttribute="bottom" constant="18" id="aum-XY-vQc"/>
+                <constraint firstItem="OSf-S9-1iq" firstAttribute="top" secondItem="JKb-lD-dzY" secondAttribute="bottom" constant="17" id="brL-8X-Jb5"/>
+                <constraint firstAttribute="centerX" secondItem="WaT-Pc-7rL" secondAttribute="centerX" id="cya-c0-Pkd"/>
             </constraints>
         </view>
     </objects>
     <resources>
-        <image name="background.jpg" width="750" height="1334"/>
+        <image name="background.jpg" width="1080" height="1920"/>
     </resources>
 </document>

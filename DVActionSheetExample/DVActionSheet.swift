@@ -100,8 +100,8 @@ class DVActionSheet: UIViewController {
     weak var target: UIViewController?
     weak var shadowView: UIView?
     
-    let deviceWidth = UIScreen.mainScreen().bounds.width
-    let deviceHeight = UIScreen.mainScreen().bounds.height
+    var deviceWidth = UIScreen.mainScreen().bounds.width
+    var deviceHeight = UIScreen.mainScreen().bounds.height
     let buttonWidth: CGFloat = UIScreen.mainScreen().bounds.width - 10
     let buttonHeight: CGFloat = 55
     
@@ -147,6 +147,19 @@ class DVActionSheet: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+//    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+//        if self.actionSheetState == .Show {
+//            if self.presentStyle == .SlideFromLeft || self.presentStyle == .SlideFromRight {
+//                deviceWidth = UIScreen.mainScreen().bounds.size.height
+//                deviceHeight = UIScreen.mainScreen().bounds.size.width
+//                println("\(deviceWidth) + \(deviceHeight)")
+//                //view.removeConstraints(view.constraints())
+//                setNewPositionForButtonsWhenRotateDevice()
+//            }
+//        }
+//        
+//    }
+    
     // MARK: - Setup View Methods
     
     private func setupView() {
@@ -154,6 +167,10 @@ class DVActionSheet: UIViewController {
         view.backgroundColor = UIColor.clearColor()
         view.setTranslatesAutoresizingMaskIntoConstraints(true)
         view.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+    }
+    
+    override func shouldAutorotate() -> Bool {
+        return true
     }
     
     // MARK: - Add Buttons Methods
@@ -212,8 +229,8 @@ class DVActionSheet: UIViewController {
     // MARK: - Animation Methods
     
     func show(#target: UIViewController, style: DVActionSheetPresentStyle?) {
-        delegate?.dvActionSheetWillAppear!(dvActionSheet: self)
         if actionSheetState == .Show { return }
+        delegate?.dvActionSheetWillAppear!(dvActionSheet: self)
         target.addChildViewController(self)
         target.view.addSubview(self.view)
         didMoveToParentViewController(target)
@@ -232,7 +249,6 @@ class DVActionSheet: UIViewController {
         self.shadowView = vView
         target.view.bringSubviewToFront(view)
         self.target = target
-        
         presentStyle = style!
         showAllButtons()
     }
@@ -324,6 +340,26 @@ class DVActionSheet: UIViewController {
     
     // MARK: - Auto Layout Methods
     
+    func setNewPositionForButtonsWhenRotateDevice() {
+        var count: CGFloat = 0
+        var slideStartPoint: CGFloat = 0
+        slideStartPoint = (deviceHeight - (CGFloat(buttonArray.count) * buttonHeight + CGFloat(buttonArray.count-1) * distance)) / 2
+        for button in buttonArray {
+            switch(presentStyle) {
+            case .SlideFromLeft:
+                button.center = CGPoint(x: deviceWidth/2, y: slideStartPoint + buttonHeight/2 + buttonHeight*count + distance*count)
+                break
+            case .SlideFromRight:
+                button.center = CGPoint(x: deviceWidth/2, y: slideStartPoint + buttonHeight/2 + buttonHeight*count + distance*count)
+                break
+            default:
+                break
+            }
+            addConstraintForButton(button: button, animationType: self.presentStyle)
+            count++
+        }
+    }
+    
     func addConstraintForButton(#button: DVActionSheetButton, animationType: DVActionSheetPresentStyle ) {
         button.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Left , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: self.distance))
@@ -338,9 +374,11 @@ class DVActionSheet: UIViewController {
             self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Bottom , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: dis))
         } else {
             var dis = CGRectGetMinY(button.frame)
-            self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: dis))
+//            self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: dis))
+            self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
+            var startPoint = -(deviceHeight/2 - CGRectGetMidY(button.frame))
+            self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.CenterYWithinMargins, relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterYWithinMargins, multiplier: 1.0, constant:startPoint))
         }
-
     }
     
     // MARK: - Supporting Methods

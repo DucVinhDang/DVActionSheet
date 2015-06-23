@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A3B91F321B034DA1008543E3 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A3B91F311B034DA1008543E3 /* background.jpg */; };
+		A33C9CC81B399F6700B9A2DE /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A33C9CC71B399F6700B9A2DE /* background.jpg */; };
 		A3F51D651B025E1F007F09D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F51D641B025E1F007F09D1 /* AppDelegate.swift */; };
 		A3F51D6C1B025E1F007F09D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3F51D6B1B025E1F007F09D1 /* Images.xcassets */; };
 		A3F51D6F1B025E1F007F09D1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A3F51D6D1B025E1F007F09D1 /* LaunchScreen.xib */; };
@@ -28,7 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A3B91F311B034DA1008543E3 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
+		A33C9CC71B399F6700B9A2DE /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
 		A3F51D5F1B025E1F007F09D1 /* DVActionSheetExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DVActionSheetExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3F51D631B025E1F007F09D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A3F51D641B025E1F007F09D1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -121,7 +121,7 @@
 			children = (
 				A3F51D851B025EE0007F09D1 /* ViewController.swift */,
 				A3F51D861B025EE0007F09D1 /* ViewController.xib */,
-				A3B91F311B034DA1008543E3 /* background.jpg */,
+				A33C9CC71B399F6700B9A2DE /* background.jpg */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -208,8 +208,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3F51D6F1B025E1F007F09D1 /* LaunchScreen.xib in Resources */,
-				A3B91F321B034DA1008543E3 /* background.jpg in Resources */,
 				A3F51D881B025EE0007F09D1 /* ViewController.xib in Resources */,
+				A33C9CC81B399F6700B9A2DE /* background.jpg in Resources */,
 				A3F51D6C1B025E1F007F09D1 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -354,6 +354,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = DVActionSheetExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -367,6 +368,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = DVActionSheetExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
