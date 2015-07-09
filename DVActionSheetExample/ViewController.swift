@@ -30,55 +30,55 @@ class ViewController: UIViewController, DVActionSheetDelegate {
     }
     
     @IBAction func bottomAction(sender: AnyObject) {
-        var dvActionSheet = DVActionSheet(title: "", delegate: self, cancelButtonTitle: "OK", destructiveButtonTitle: "Click")
-        dvActionSheet.show(target: self, style: .DropUpFromBottom)
+        let dvActionSheet = DVActionSheet(title: "", delegate: self, cancelButtonTitle: "OK", destructiveButtonTitle: "Click")
+        dvActionSheet.show(self, style: .DropUpFromBottom)
     }
     
     @IBAction func topAction(sender: AnyObject) {
-        var dvActionSheet = DVActionSheet(title: "", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B","C"])
-        dvActionSheet.show(target: self, style: .DropDownFromTop)
+        let dvActionSheet = DVActionSheet(title: "", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B","C"])
+        dvActionSheet.show(self, style: .DropDownFromTop)
     }
     
     @IBAction func leftAction(sender: AnyObject) {
-        var dvActionSheet = DVActionSheet(title: "", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B","C"])
-        dvActionSheet.show(target: self, style: .SlideFromLeft)
+        let dvActionSheet = DVActionSheet(title: "", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B","C"])
+        dvActionSheet.show(self, style: .SlideFromLeft)
     }
 
     @IBAction func rightAction(sender: AnyObject) {
-        var dvActionSheet = DVActionSheet(title: "", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B","C"])
-        dvActionSheet.show(target: self, style: .SlideFromRight)
+        let dvActionSheet = DVActionSheet(title: "", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B","C"])
+        dvActionSheet.show(self, style: .SlideFromRight)
     }
     
     // MARK: - DVActionSheet Delegate
     
-    func dvActionSheetWillAppear(#dvActionSheet: DVActionSheet) {
-        println("Will Appear")
+    func dvActionSheetWillAppear(dvActionSheet dvActionSheet: DVActionSheet) {
+        print("Will Appear")
     }
     
-    func dvActionSheetDidAppear(#dvActionSheet: DVActionSheet) {
-        println("Did Appear")
+    func dvActionSheetDidAppear(dvActionSheet dvActionSheet: DVActionSheet) {
+        print("Did Appear")
     }
     
-    func dvActionSheetWillDisappear(#dvActionSheet: DVActionSheet) {
-        println("Will Disappear")
+    func dvActionSheetWillDisappear(dvActionSheet dvActionSheet: DVActionSheet) {
+        print("Will Disappear")
     }
     
-    func dvActionSheetDidDisappear(#dvActionSheet: DVActionSheet) {
-        println("Did Disappear")
+    func dvActionSheetDidDisappear(dvActionSheet dvActionSheet: DVActionSheet) {
+        print("Did Disappear")
     }
     
-    func dvActionSheet(#dvActionSheet: DVActionSheet, didClickButtonAtIndex: Int) {
+    func dvActionSheet(dvActionSheet dvActionSheet: DVActionSheet, didClickButtonAtIndex: Int) {
         switch(didClickButtonAtIndex) {
         case 0:
-            println("Clicked on Destructive button")
+            print("Clicked on Destructive button")
         case 1:
-            println("Clicked on button at index \(didClickButtonAtIndex)")
+            print("Clicked on button at index \(didClickButtonAtIndex)")
         case 2:
-            println("Clicked on button at index \(didClickButtonAtIndex)")
+            print("Clicked on button at index \(didClickButtonAtIndex)")
         case 3:
-            println("Clicked on button at index \(didClickButtonAtIndex)")
+            print("Clicked on button at index \(didClickButtonAtIndex)")
         case 4:
-            println("Clicked on Cancel button")
+            print("Clicked on Cancel button")
 
         default:
             break;

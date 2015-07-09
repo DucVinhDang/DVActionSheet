@@ -9,11 +9,11 @@
 import UIKit
 
 @objc protocol DVActionSheetDelegate {
-    optional func dvActionSheetWillAppear(#dvActionSheet: DVActionSheet)
-    optional func dvActionSheetDidAppear(#dvActionSheet: DVActionSheet)
-    optional func dvActionSheetWillDisappear(#dvActionSheet: DVActionSheet)
-    optional func dvActionSheetDidDisappear(#dvActionSheet: DVActionSheet)
-    optional func dvActionSheet(#dvActionSheet: DVActionSheet, didClickButtonAtIndex: Int)
+    optional func dvActionSheetWillAppear(dvActionSheet dvActionSheet: DVActionSheet)
+    optional func dvActionSheetDidAppear(dvActionSheet dvActionSheet: DVActionSheet)
+    optional func dvActionSheetWillDisappear(dvActionSheet dvActionSheet: DVActionSheet)
+    optional func dvActionSheetDidDisappear(dvActionSheet dvActionSheet: DVActionSheet)
+    optional func dvActionSheet(dvActionSheet dvActionSheet: DVActionSheet, didClickButtonAtIndex: Int)
 }
 
 class DVActionSheetButton: UIButton {
@@ -53,19 +53,19 @@ class DVActionSheetButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setAttributesForNormalButton(#title: String, titleColor: UIColor, backgroundColor: UIColor) {
+    func setAttributesForNormalButton(title title: String, titleColor: UIColor, backgroundColor: UIColor) {
         dvTitle = title
         dvTitleColor = titleColor
         dvBackgroundColor = backgroundColor
     }
     
-    func setAttributesForCancelButton(#title: String) {
+    func setAttributesForCancelButton(title title: String) {
         dvTitle = title
         dvTitleColor = UIColor.whiteColor()
         dvBackgroundColor = UIColor(red: 0.404, green: 0.827, blue: 0.882, alpha: 1.0)
     }
     
-    func setAttributesForDestructiveButton(#title: String) {
+    func setAttributesForDestructiveButton(title title: String) {
         dvTitle = title
         dvTitleColor = UIColor.whiteColor()
         dvBackgroundColor = UIColor(red: 0.780, green: 0.200, blue: 0.290, alpha: 1.0)
@@ -165,8 +165,8 @@ class DVActionSheet: UIViewController {
     private func setupView() {
         view.frame = UIScreen.mainScreen().bounds
         view.backgroundColor = UIColor.clearColor()
-        view.setTranslatesAutoresizingMaskIntoConstraints(true)
-        view.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+        view.translatesAutoresizingMaskIntoConstraints = true
+        view.autoresizingMask = UIViewAutoresizing.FlexibleHeight
     }
     
     override func shouldAutorotate() -> Bool {
@@ -175,11 +175,11 @@ class DVActionSheet: UIViewController {
     
     // MARK: - Add Buttons Methods
     
-    private func addActionSheetWithTitle(#title: String, delegate: DVActionSheetDelegate?, cancelButtonTitle: String, destructiveButtonTitle: String) {
+    private func addActionSheetWithTitle(title title: String, delegate: DVActionSheetDelegate?, cancelButtonTitle: String, destructiveButtonTitle: String) {
         addActionSheetWithTitle(title: title, delegate: delegate, cancelButtonTitle: cancelButtonTitle, destructiveButtonTitle: destructiveButtonTitle, otherButtonTitles: nil)
     }
     
-    private func addActionSheetWithTitle(#title: String, delegate: DVActionSheetDelegate?, cancelButtonTitle: String, destructiveButtonTitle: String, otherButtonTitles: [String]?) {
+    private func addActionSheetWithTitle(title title: String, delegate: DVActionSheetDelegate?, cancelButtonTitle: String, destructiveButtonTitle: String, otherButtonTitles: [String]?) {
         if !destructiveButtonTitle.isEmpty { addDestructiveButtonWithTitle(title: destructiveButtonTitle) }
         else { existDestructiveButton = false }
         
@@ -189,12 +189,12 @@ class DVActionSheet: UIViewController {
                 addNormalButtonWithTitle(title: title, titleColor: buttonTitleColor, backgroundColor: buttonBackgroundColor)
             }
         }
-        if !cancelButtonTitle.isEmpty { addCancelButtonWithTitle(title: cancelButtonTitle) }
-        else { addCancelButtonWithTitle(title: "Cancel") }
+        if !cancelButtonTitle.isEmpty { addCancelButtonWithTitle(cancelButtonTitle) }
+        else { addCancelButtonWithTitle("Cancel") }
     }
     
-    private func addNormalButtonWithTitle(#title: String, titleColor: UIColor, backgroundColor: UIColor) {
-        var button = DVActionSheetButton(frame: CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight))
+    private func addNormalButtonWithTitle(title title: String, titleColor: UIColor, backgroundColor: UIColor) {
+        let button = DVActionSheetButton(frame: CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight))
         button.center = CGPointMake(deviceWidth/2, deviceHeight + buttonHeight/2)
         button.dvActionSheetButtonType = .Normal
         button.setAttributesForNormalButton(title: title, titleColor: buttonTitleColor, backgroundColor: buttonBackgroundColor)
@@ -204,8 +204,8 @@ class DVActionSheet: UIViewController {
         buttonArray.append(button)
     }
     
-    private func addCancelButtonWithTitle(#title: String) {
-        var button = DVActionSheetButton(frame: CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight))
+    private func addCancelButtonWithTitle(title: String) {
+        let button = DVActionSheetButton(frame: CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight))
         button.center = CGPointMake(deviceWidth/2, deviceHeight + buttonHeight/2)
         button.dvActionSheetButtonType = .Cancel
         button.setAttributesForCancelButton(title: title)
@@ -215,8 +215,8 @@ class DVActionSheet: UIViewController {
         buttonArray.append(button)
     }
     
-    private func addDestructiveButtonWithTitle(#title: String) {
-        var button = DVActionSheetButton(frame: CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight))
+    private func addDestructiveButtonWithTitle(title title: String) {
+        let button = DVActionSheetButton(frame: CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight))
         button.center = CGPointMake(deviceWidth/2, deviceHeight + buttonHeight/2)
         button.dvActionSheetButtonType = .Destructive
         button.setAttributesForDestructiveButton(title: title)
@@ -228,7 +228,7 @@ class DVActionSheet: UIViewController {
     
     // MARK: - Animation Methods
     
-    func show(#target: UIViewController, style: DVActionSheetPresentStyle?) {
+    func show(target: UIViewController, style: DVActionSheetPresentStyle?) {
         if actionSheetState == .Show { return }
         delegate?.dvActionSheetWillAppear!(dvActionSheet: self)
         target.addChildViewController(self)
@@ -236,10 +236,10 @@ class DVActionSheet: UIViewController {
         didMoveToParentViewController(target)
         //addVibrancyEffectToView(view)
         
-        var vView = UIView()
+        let vView = UIView()
         target.view.addSubview(vView)
         
-        vView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        vView.translatesAutoresizingMaskIntoConstraints = false
         target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Leading, relatedBy: .Equal, toItem: target.view, attribute: .Leading, multiplier: 1.0, constant: 0.0))
         target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Trailing, relatedBy: .Equal, toItem: target.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0))
         target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Top, relatedBy: .Equal, toItem: target.view, attribute: .Top, multiplier: 1.0, constant: 0.0))
@@ -334,7 +334,7 @@ class DVActionSheet: UIViewController {
             else { self.shadowView?.alpha = 0 }
             }, completion: { finished in
                 if !show { button.removeFromSuperview() }
-                else { self.addConstraintForButton(button: button, animationType: self.presentStyle) }
+                else { self.addConstraintForButton(button, animationType: self.presentStyle) }
         })
     }
     
@@ -355,28 +355,28 @@ class DVActionSheet: UIViewController {
             default:
                 break
             }
-            addConstraintForButton(button: button, animationType: self.presentStyle)
+            addConstraintForButton(button, animationType: self.presentStyle)
             count++
         }
     }
     
-    func addConstraintForButton(#button: DVActionSheetButton, animationType: DVActionSheetPresentStyle ) {
-        button.setTranslatesAutoresizingMaskIntoConstraints(false)
+    func addConstraintForButton(button: DVActionSheetButton, animationType: DVActionSheetPresentStyle ) {
+        button.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Left , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: self.distance))
         self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Right , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: -self.distance))
         self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Height , relatedBy: .Equal, toItem: nil, attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: self.buttonHeight))
         
         if animationType == .DropDownFromTop {
-            var dis = CGRectGetMinY(button.frame)
+            let dis = CGRectGetMinY(button.frame)
             self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: dis))
         } else if animationType == .DropUpFromBottom {
-            var dis = CGRectGetMaxY(button.frame) - self.deviceHeight
+            let dis = CGRectGetMaxY(button.frame) - self.deviceHeight
             self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Bottom , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: dis))
         } else {
-            var dis = CGRectGetMinY(button.frame)
+            let dis = CGRectGetMinY(button.frame)
 //            self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: dis))
             self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
-            var startPoint = -(deviceHeight/2 - CGRectGetMidY(button.frame))
+            let startPoint = -(deviceHeight/2 - CGRectGetMidY(button.frame))
             self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.CenterYWithinMargins, relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterYWithinMargins, multiplier: 1.0, constant:startPoint))
         }
     }
@@ -387,7 +387,7 @@ class DVActionSheet: UIViewController {
         let blurE: UIBlurEffect = UIBlurEffect(style: .Dark)
         let blurV: UIVisualEffectView = UIVisualEffectView(effect: blurE)
         blurV.frame = currentView.frame
-        blurV.setTranslatesAutoresizingMaskIntoConstraints(false)
+        blurV.translatesAutoresizingMaskIntoConstraints = false
         currentView.addSubview(blurV)
     }
     

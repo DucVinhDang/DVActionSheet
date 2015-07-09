@@ -170,6 +170,7 @@
 		A3F51D571B025E1F007F09D1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = DVISoft;
 				TargetAttributes = {
