@@ -35,7 +35,7 @@ class ViewController: UIViewController, DVActionSheetDelegate {
     }
     
     @IBAction func topAction(sender: AnyObject) {
-        let dvActionSheet = DVActionSheet(title: "", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B","C"])
+        let dvActionSheet = DVActionSheet(title: "Đây là danh sách các chức năng mà hệ thống hỗ trợ, xin mời lựa chọn", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B","C"])
         dvActionSheet.show(self, style: .DropDownFromTop)
     }
     

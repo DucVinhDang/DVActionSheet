@@ -47,35 +47,37 @@ class DVActionSheetButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        dvFont = UIFont(name: "Helvetica", size: 24)
+        
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setAttributesForNormalButton(title title: String, titleColor: UIColor, backgroundColor: UIColor) {
+    func setAttributesForButton(title title: String, titleColor: UIColor, backgroundColor: UIColor, font: UIFont) {
         dvTitle = title
         dvTitleColor = titleColor
         dvBackgroundColor = backgroundColor
+        dvFont = font
+        dvCornerRadius = 3
     }
     
-    func setAttributesForCancelButton(title title: String) {
-        dvTitle = title
-        dvTitleColor = UIColor.whiteColor()
-        dvBackgroundColor = UIColor(red: 0.404, green: 0.827, blue: 0.882, alpha: 1.0)
-    }
+//    func setAttributesForCancelButton(title title: String) {
+//        dvTitle = title
+//        dvTitleColor = UIColor.blackColor()
+////        dvBackgroundColor = UIColor(red: 0.404, green: 0.827, blue: 0.882, alpha: 1.0)
+//        dvBackgroundColor = UIColor(red: 0.976, green: 0.976, blue: 0.976, alpha: 1.0)
+//    }
+//    
+//    func setAttributesForDestructiveButton(title title: String) {
+//        dvTitle = title
+//        dvTitleColor = UIColor.whiteColor()
+////        dvBackgroundColor = UIColor(red: 0.780, green: 0.200, blue: 0.290, alpha: 1.0)
+//        dvBackgroundColor = UIColor(red: 0.784, green: 0.216, blue: 0.349, alpha: 1.0)
+//        dvFont = UIFont(name: "Helvetica-Bold", size: 16)
+//    }
     
-    func setAttributesForDestructiveButton(title title: String) {
-        dvTitle = title
-        dvTitleColor = UIColor.whiteColor()
-        dvBackgroundColor = UIColor(red: 0.780, green: 0.200, blue: 0.290, alpha: 1.0)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        dvFont = UIFont(name: "Helvetica", size: 16)
-        dvCornerRadius = 5
-    }
 }
 
 class DVActionSheet: UIViewController {
@@ -99,16 +101,32 @@ class DVActionSheet: UIViewController {
     
     weak var target: UIViewController?
     weak var shadowView: UIView?
+    weak var titleTextView: UITextView?
     
     var deviceWidth = UIScreen.mainScreen().bounds.width
     var deviceHeight = UIScreen.mainScreen().bounds.height
     let buttonWidth: CGFloat = UIScreen.mainScreen().bounds.width - 10
-    let buttonHeight: CGFloat = 55
+    let buttonHeight: CGFloat = 50
     
-    let buttonFont = UIFont(name: "Helvetica", size: 16)
-    let buttonTitleColor = UIColor.whiteColor()
-    let buttonBackgroundColor = UIColor(red: 0.404, green: 0.827, blue: 0.882, alpha: 1.0)
-    let buttonHightLightBackgroundColor = UIColor(red: 0.333, green: 0.690, blue: 0.780, alpha: 1.9)
+    let titleTextViewWidth: CGFloat = UIScreen.mainScreen().bounds.width - 10
+    var titleTextViewHeight: CGFloat?
+    
+    let normalButtonFont = UIFont(name: "Helvetica", size: 16)
+    let normalButtonTitleColor = UIColor.blackColor()
+    let normalButtonBackgroundColor = UIColor(red: 0.920, green: 0.920, blue: 0.920, alpha: 1.0)
+    let normalButtonHightLightBackgroundColor = UIColor(red: 0.333, green: 0.690, blue: 0.780, alpha: 1.9)
+    
+    let destructiveButtonFont = UIFont(name: "Helvetica-Bold", size: 16)
+    let destructiveButtonTitleColor = UIColor.whiteColor()
+    let destructiveButtonBackgroundColor = UIColor(red: 0.784, green: 0.216, blue: 0.349, alpha: 1.0)
+    let destructiveButtonHightLightBackgroundColor = UIColor(red: 0.333, green: 0.690, blue: 0.780, alpha: 1.9)
+    
+    let cancelButtonFont = UIFont(name: "Helvetica", size: 16)
+    let cancelButtonTitleColor = UIColor.blackColor()
+    let cancelButtonBackgroundColor = UIColor(red: 0.920, green: 0.920, blue: 0.920, alpha: 1.0)
+    let cancelButtonHightLightBackgroundColor = UIColor(red: 0.333, green: 0.690, blue: 0.780, alpha: 1.9)
+    
+    
     let buttonCornerRadius: CGFloat = 0
     let distance: CGFloat = 5
     
@@ -180,46 +198,70 @@ class DVActionSheet: UIViewController {
     }
     
     private func addActionSheetWithTitle(title title: String, delegate: DVActionSheetDelegate?, cancelButtonTitle: String, destructiveButtonTitle: String, otherButtonTitles: [String]?) {
-        if !destructiveButtonTitle.isEmpty { addDestructiveButtonWithTitle(title: destructiveButtonTitle) }
+        if !title.isEmpty { addTitleTextView(title: title) }
+        if !destructiveButtonTitle.isEmpty { addDestructiveButtonWithTitle(title: destructiveButtonTitle, titleColor: destructiveButtonTitleColor, backgroundColor: destructiveButtonBackgroundColor, font: destructiveButtonFont!) }
         else { existDestructiveButton = false }
         
         if delegate != nil { self.delegate = delegate }
         if otherButtonTitles != nil {
             for title in otherButtonTitles! {
-                addNormalButtonWithTitle(title: title, titleColor: buttonTitleColor, backgroundColor: buttonBackgroundColor)
+                addNormalButtonWithTitle(title: title, titleColor: normalButtonTitleColor, backgroundColor: normalButtonBackgroundColor, font: normalButtonFont!)
             }
         }
-        if !cancelButtonTitle.isEmpty { addCancelButtonWithTitle(cancelButtonTitle) }
-        else { addCancelButtonWithTitle("Cancel") }
+        if !cancelButtonTitle.isEmpty { addCancelButtonWithTitle(title: cancelButtonTitle, titleColor: cancelButtonTitleColor, backgroundColor: cancelButtonBackgroundColor, font: cancelButtonFont!) }
+        else { addCancelButtonWithTitle(title: "Cancel", titleColor: cancelButtonTitleColor, backgroundColor: cancelButtonBackgroundColor, font: cancelButtonFont!) }
     }
     
-    private func addNormalButtonWithTitle(title title: String, titleColor: UIColor, backgroundColor: UIColor) {
+    private func addTitleTextView(title title: String) {
+        titleTextViewHeight = 90
+        let newTextView = UITextView(frame: CGRect(x: 0, y: 0, width: titleTextViewWidth, height: titleTextViewHeight!))
+        newTextView.center = CGPointMake(deviceWidth/2, deviceHeight + titleTextViewHeight!/2)
+        newTextView.text = title
+        newTextView.textAlignment = NSTextAlignment.Center
+        newTextView.font = UIFont(name: "Helvetica", size: 17)
+        newTextView.textColor = UIColor.whiteColor()
+        newTextView.backgroundColor = UIColor.clearColor()
+        newTextView.layer.shadowOpacity = 0.6
+        
+        let fixedWidth = newTextView.frame.size.width
+        let newSize = newTextView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+        var newFrame = newTextView.frame
+        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+        newTextView.frame = newFrame;
+        
+        titleTextViewHeight = newFrame.size.height
+        
+        view.addSubview(newTextView)
+        titleTextView = newTextView
+    }
+    
+    private func addNormalButtonWithTitle(title title: String, titleColor: UIColor, backgroundColor: UIColor, font: UIFont) {
         let button = DVActionSheetButton(frame: CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight))
         button.center = CGPointMake(deviceWidth/2, deviceHeight + buttonHeight/2)
         button.dvActionSheetButtonType = .Normal
-        button.setAttributesForNormalButton(title: title, titleColor: buttonTitleColor, backgroundColor: buttonBackgroundColor)
+        button.setAttributesForButton(title: title, titleColor: titleColor, backgroundColor: backgroundColor, font: font)
         button.index = existDestructiveButton ? buttonArray.count : buttonArray.count + 1
         button.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button)
         buttonArray.append(button)
     }
     
-    private func addCancelButtonWithTitle(title: String) {
+    private func addCancelButtonWithTitle(title title: String, titleColor: UIColor, backgroundColor: UIColor, font: UIFont) {
         let button = DVActionSheetButton(frame: CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight))
         button.center = CGPointMake(deviceWidth/2, deviceHeight + buttonHeight/2)
         button.dvActionSheetButtonType = .Cancel
-        button.setAttributesForCancelButton(title: title)
+        button.setAttributesForButton(title: title, titleColor: titleColor, backgroundColor: backgroundColor, font: font)
         button.index = existDestructiveButton ? buttonArray.count : buttonArray.count + 1
         button.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button)
         buttonArray.append(button)
     }
     
-    private func addDestructiveButtonWithTitle(title title: String) {
+    private func addDestructiveButtonWithTitle(title title: String, titleColor: UIColor, backgroundColor: UIColor, font: UIFont) {
         let button = DVActionSheetButton(frame: CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight))
         button.center = CGPointMake(deviceWidth/2, deviceHeight + buttonHeight/2)
         button.dvActionSheetButtonType = .Destructive
-        button.setAttributesForDestructiveButton(title: title)
+        button.setAttributesForButton(title: title, titleColor: titleColor, backgroundColor: backgroundColor, font: font)
         button.index = buttonArray.count
         button.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(button)
@@ -250,7 +292,7 @@ class DVActionSheet: UIViewController {
         target.view.bringSubviewToFront(view)
         self.target = target
         presentStyle = style!
-        showAllButtons()
+        showAllComponents()
     }
     
     private func hide() {
@@ -259,21 +301,45 @@ class DVActionSheet: UIViewController {
         hideAllButtons()
     }
     
-    private func showAllButtons() {
-        var count: CGFloat = 0
+    private func showAllComponents() {
         view.alpha = 0
         UIView.animateWithDuration(0.2, animations: { self.view.alpha = 1 })
+        if titleTextView != nil { showTitleTextView() }
+        showAllButtons()
+    }
+    
+    private func showTitleTextView() {
+        let cenX = titleTextView!.center.x
+        switch(presentStyle) {
+        case .DropDownFromTop:
+            titleTextView?.center = CGPoint(x: (titleTextView?.center.x)!, y: -titleTextViewHeight!/2)
+            let cenY = deviceHeight - (deviceHeight - (CGFloat(buttonArray.count) * buttonHeight + CGFloat(buttonArray.count+1) * distance)) + titleTextViewHeight!/2
+            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: cenX, y: cenY), show: true)
+            break
+        case .DropUpFromBottom:
+            break
+        case .SlideFromLeft, .SlideFromRight:
+            break
+        }
+    }
+    
+    private func showAllButtons() {
+        var count: CGFloat = 0
+    
         if presentStyle == .DropUpFromBottom { buttonArray = buttonArray.reverse() }
         
         var slideStartPoint: CGFloat = 0
         if presentStyle == .SlideFromLeft || presentStyle == .SlideFromRight {
-            slideStartPoint = (deviceHeight - (CGFloat(buttonArray.count) * buttonHeight + CGFloat(buttonArray.count-1) * distance)) / 2
+            if titleTextView != nil {
+                slideStartPoint = (deviceHeight - (CGFloat(buttonArray.count) * buttonHeight + CGFloat(buttonArray.count) * distance) - titleTextViewHeight!) / 2
+            } else {
+                slideStartPoint = (deviceHeight - (CGFloat(buttonArray.count) * buttonHeight + CGFloat(buttonArray.count-1) * distance)) / 2
+            }
         }
         
         for button in buttonArray {
             switch(presentStyle) {
             case .DropDownFromTop:
-                
                 button.center = CGPoint(x: button.center.x, y: -buttonHeight/2)
                 animateButtonToNewPosition(button, pos: CGPoint(x: button.center.x, y: self.distance*(count+1) + self.buttonHeight/2 + self.buttonHeight*count), show: true)
 
@@ -288,8 +354,6 @@ class DVActionSheet: UIViewController {
             case .SlideFromRight:
                 button.center = CGPoint(x: deviceWidth + buttonWidth/2, y: slideStartPoint + buttonHeight/2 + buttonHeight*count + distance*count)
                 animateButtonToNewPosition(button, pos: CGPoint(x: deviceWidth - distance - buttonWidth/2, y: button.center.y), show: true)
-            default:
-                break
             }
             self.view.bringSubviewToFront(button)
             count++
@@ -309,8 +373,6 @@ class DVActionSheet: UIViewController {
                 animateButtonToNewPosition(button, pos: CGPoint(x: -buttonWidth/2, y: button.center.y), show: false)
             case .SlideFromRight:
                 animateButtonToNewPosition(button, pos: CGPoint(x: deviceWidth + buttonWidth/2, y: button.center.y), show: false)
-            default:
-                break
             }
         }
         
@@ -335,6 +397,18 @@ class DVActionSheet: UIViewController {
             }, completion: { finished in
                 if !show { button.removeFromSuperview() }
                 else { self.addConstraintForButton(button, animationType: self.presentStyle) }
+        })
+    }
+    
+    private func animateTitleTextViewToNewPosition(textView: UITextView, pos: CGPoint, show: Bool) {
+        if show { shadowView?.alpha = 0 }
+        UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.65, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: {
+            textView.center = pos
+            if show { self.shadowView?.alpha = 0.6 }
+            else { self.shadowView?.alpha = 0 }
+            }, completion: { finished in
+                if !show { textView.removeFromSuperview() }
+                else {  }
         })
     }
     
@@ -373,7 +447,7 @@ class DVActionSheet: UIViewController {
             let dis = CGRectGetMaxY(button.frame) - self.deviceHeight
             self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Bottom , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: dis))
         } else {
-            let dis = CGRectGetMinY(button.frame)
+//            let dis = CGRectGetMinY(button.frame)
 //            self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: dis))
             self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
             let startPoint = -(deviceHeight/2 - CGRectGetMidY(button.frame))

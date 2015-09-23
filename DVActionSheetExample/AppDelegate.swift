@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
         window?.backgroundColor = UIColor.whiteColor()
         
-        var myVC = ViewController(nibName: "ViewController", bundle: nil)
+        let myVC = ViewController(nibName: "ViewController", bundle: nil)
         window?.rootViewController = myVC
         window?.makeKeyAndVisible()
         return true
