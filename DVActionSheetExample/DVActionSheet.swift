@@ -48,7 +48,6 @@ class DVActionSheetButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         dvFont = UIFont(name: "Helvetica", size: 24)
-        
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -129,7 +128,7 @@ class DVActionSheet: UIViewController {
     
     let buttonCornerRadius: CGFloat = 0
     let distance: CGFloat = 5
-    
+    let shadowViewValue: CGFloat = 0.7
     var existDestructiveButton = true
     
     // MARK: - Init Methods
@@ -213,7 +212,7 @@ class DVActionSheet: UIViewController {
     }
     
     private func addTitleTextView(title title: String) {
-        titleTextViewHeight = 90
+        titleTextViewHeight = 0
         let newTextView = UITextView(frame: CGRect(x: 0, y: 0, width: titleTextViewWidth, height: titleTextViewHeight!))
         newTextView.center = CGPointMake(deviceWidth/2, deviceHeight + titleTextViewHeight!/2)
         newTextView.text = title
@@ -221,7 +220,7 @@ class DVActionSheet: UIViewController {
         newTextView.font = UIFont(name: "Helvetica", size: 17)
         newTextView.textColor = UIColor.whiteColor()
         newTextView.backgroundColor = UIColor.clearColor()
-        newTextView.layer.shadowOpacity = 0.6
+        newTextView.layer.shadowOpacity = 0.8
         
         let fixedWidth = newTextView.frame.size.width
         let newSize = newTextView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
@@ -311,18 +310,16 @@ class DVActionSheet: UIViewController {
     private func showTitleTextView() {
         switch(presentStyle) {
         case .DropDownFromTop:
-            titleTextView?.center = CGPoint(x: (titleTextView?.center.x)!, y: -titleTextViewHeight!/2)
-            let cenX = titleTextView!.center.x
+            titleTextView?.center = CGPoint(x: titleTextView!.center.x, y: -titleTextViewHeight!/2)
             let cenY = deviceHeight - (deviceHeight - (CGFloat(buttonArray.count) * buttonHeight + CGFloat(buttonArray.count+1) * distance)) + titleTextViewHeight!/2
-            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: cenX, y: cenY), show: true)
+            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: titleTextView!.center.x, y: cenY), show: true)
             break
         case .DropUpFromBottom:
-            let cenX = titleTextView!.center.x
             let cenY = (deviceHeight - (CGFloat(buttonArray.count) * buttonHeight + CGFloat(buttonArray.count+1) * distance)) - titleTextViewHeight!/2
-            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: cenX, y: cenY), show: true)
+            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: titleTextView!.center.x, y: cenY), show: true)
             break
         case .SlideFromLeft:
-            let cenX = 0 - titleTextViewWidth/2
+            let cenX = -titleTextViewWidth/2
             let cenY = ((deviceHeight - (CGFloat(buttonArray.count) * buttonHeight + CGFloat(buttonArray.count) * distance)) / 2) + titleTextViewHeight!/2
             titleTextView?.center = CGPoint(x: cenX, y: cenY)
             animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: deviceWidth/2, y: cenY), show: true)
@@ -423,7 +420,7 @@ class DVActionSheet: UIViewController {
         if show { shadowView?.alpha = 0 }
         UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.65, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: {
             button.center = pos
-            if show { self.shadowView?.alpha = 0.6 }
+            if show { self.shadowView?.alpha = self.shadowViewValue }
             else { self.shadowView?.alpha = 0 }
             }, completion: { finished in
                 if !show { button.removeFromSuperview() }
@@ -435,7 +432,7 @@ class DVActionSheet: UIViewController {
         if show { shadowView?.alpha = 0 }
         UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.65, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: {
             textView.center = pos
-            if show { self.shadowView?.alpha = 0.6 }
+            if show { self.shadowView?.alpha = self.shadowViewValue }
             else { self.shadowView?.alpha = 0 }
             }, completion: { finished in
                 if !show { textView.removeFromSuperview() }
@@ -458,8 +455,6 @@ class DVActionSheet: UIViewController {
             let dis = CGRectGetMaxY(button.frame) - self.deviceHeight
             self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Bottom , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: dis))
         } else {
-//            let dis = CGRectGetMinY(button.frame)
-//            self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: dis))
             self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
             let startPoint = -(deviceHeight/2 - CGRectGetMidY(button.frame))
             self.view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.CenterYWithinMargins, relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.CenterYWithinMargins, multiplier: 1.0, constant:startPoint))
@@ -470,7 +465,7 @@ class DVActionSheet: UIViewController {
         titleTextView?.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint(item: titleTextView!, attribute: NSLayoutAttribute.Left , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: self.distance))
         self.view.addConstraint(NSLayoutConstraint(item: titleTextView!, attribute: NSLayoutAttribute.Right , relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: -self.distance))
-        self.view.addConstraint(NSLayoutConstraint(item: titleTextView!, attribute: NSLayoutAttribute.Height , relatedBy: .Equal, toItem: nil, attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: self.buttonHeight))
+        self.view.addConstraint(NSLayoutConstraint(item: titleTextView!, attribute: NSLayoutAttribute.Height , relatedBy: .Equal, toItem: nil, attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: self.titleTextViewHeight!))
         
         if animationType == .DropDownFromTop {
             let dis = CGRectGetMinY(titleTextView!.frame)
