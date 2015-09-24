@@ -197,7 +197,7 @@ class DVActionSheet: UIViewController {
     }
     
     private func addActionSheetWithTitle(title title: String, delegate: DVActionSheetDelegate?, cancelButtonTitle: String, destructiveButtonTitle: String, otherButtonTitles: [String]?) {
-        if !title.isEmpty { addTitleTextView(title: title) }
+        if !title.isEmpty { self.addTitleTextView(title: title) }
         if !destructiveButtonTitle.isEmpty { addDestructiveButtonWithTitle(title: destructiveButtonTitle, titleColor: destructiveButtonTitleColor, backgroundColor: destructiveButtonBackgroundColor, font: destructiveButtonFont!) }
         else { existDestructiveButton = false }
         
@@ -212,9 +212,7 @@ class DVActionSheet: UIViewController {
     }
     
     private func addTitleTextView(title title: String) {
-        titleTextViewHeight = 0
-        let newTextView = UITextView(frame: CGRect(x: 0, y: 0, width: titleTextViewWidth, height: titleTextViewHeight!))
-        newTextView.center = CGPointMake(deviceWidth/2, deviceHeight + titleTextViewHeight!/2)
+        let newTextView = UITextView(frame: CGRect(x: (deviceWidth-titleTextViewWidth)/2, y: deviceHeight, width: titleTextViewWidth, height: 0))
         newTextView.text = title
         newTextView.textAlignment = NSTextAlignment.Center
         newTextView.font = UIFont(name: "Helvetica", size: 17)
@@ -223,20 +221,15 @@ class DVActionSheet: UIViewController {
         newTextView.layer.shadowOpacity = 0.8
         
         let fixedWidth = newTextView.frame.size.width
-        let newSize = newTextView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-        var newFrame = newTextView.frame
-        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-        newTextView.frame = newFrame;
-        
-        titleTextViewHeight = newFrame.size.height
-        
-        view.addSubview(newTextView)
-        titleTextView = newTextView
+        let newSize = newTextView.sizeThatFits(CGSize(width: fixedWidth, height: 0))
+        titleTextViewHeight = newSize.height
+        newTextView.frame.size = CGSize(width: titleTextViewWidth, height: titleTextViewHeight!)
+        self.view.addSubview(newTextView)
+        self.titleTextView = newTextView
     }
     
     private func addNormalButtonWithTitle(title title: String, titleColor: UIColor, backgroundColor: UIColor, font: UIFont) {
-        let button = DVActionSheetButton(frame: CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight))
-        button.center = CGPointMake(deviceWidth/2, deviceHeight + buttonHeight/2)
+        let button = DVActionSheetButton(frame: CGRect(x: (deviceWidth-buttonWidth)/2, y: deviceHeight, width: buttonWidth, height: buttonHeight))
         button.dvActionSheetButtonType = .Normal
         button.setAttributesForButton(title: title, titleColor: titleColor, backgroundColor: backgroundColor, font: font)
         button.index = existDestructiveButton ? buttonArray.count : buttonArray.count + 1
@@ -246,8 +239,7 @@ class DVActionSheet: UIViewController {
     }
     
     private func addCancelButtonWithTitle(title title: String, titleColor: UIColor, backgroundColor: UIColor, font: UIFont) {
-        let button = DVActionSheetButton(frame: CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight))
-        button.center = CGPointMake(deviceWidth/2, deviceHeight + buttonHeight/2)
+        let button = DVActionSheetButton(frame: CGRect(x: (deviceWidth-buttonWidth)/2, y: deviceHeight, width: buttonWidth, height: buttonHeight))
         button.dvActionSheetButtonType = .Cancel
         button.setAttributesForButton(title: title, titleColor: titleColor, backgroundColor: backgroundColor, font: font)
         button.index = existDestructiveButton ? buttonArray.count : buttonArray.count + 1
@@ -257,8 +249,7 @@ class DVActionSheet: UIViewController {
     }
     
     private func addDestructiveButtonWithTitle(title title: String, titleColor: UIColor, backgroundColor: UIColor, font: UIFont) {
-        let button = DVActionSheetButton(frame: CGRect(x: 0, y: 0, width: buttonWidth, height: buttonHeight))
-        button.center = CGPointMake(deviceWidth/2, deviceHeight + buttonHeight/2)
+        let button = DVActionSheetButton(frame: CGRect(x: (deviceWidth-buttonWidth)/2, y: deviceHeight, width: buttonWidth, height: buttonHeight))
         button.dvActionSheetButtonType = .Destructive
         button.setAttributesForButton(title: title, titleColor: titleColor, backgroundColor: backgroundColor, font: font)
         button.index = buttonArray.count
@@ -286,7 +277,7 @@ class DVActionSheet: UIViewController {
         target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Top, relatedBy: .Equal, toItem: target.view, attribute: .Top, multiplier: 1.0, constant: 0.0))
         target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Bottom, relatedBy: .Equal, toItem: target.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
         vView.backgroundColor = UIColor.blackColor()
-        //addVibrancyEffectToView(vView)
+        
         self.shadowView = vView
         target.view.bringSubviewToFront(view)
         self.target = target
@@ -295,14 +286,21 @@ class DVActionSheet: UIViewController {
     }
     
     private func hideAllComponents() {
-        delegate?.dvActionSheetWillDisappear?(dvActionSheet: self)
         if actionSheetState == .Hide { return }
+        delegate?.dvActionSheetWillDisappear?(dvActionSheet: self)
+        UIView.animateWithDuration(0.3, animations: {
+            self.shadowView?.alpha = 0
+            }, completion: { flag in
+            self.shadowView?.removeFromSuperview()
+            self.shadowView = nil
+        })
         hideTitleTextViewAndAllButtons()
     }
     
     private func showAllComponents() {
-        view.alpha = 0
-        UIView.animateWithDuration(0.2, animations: { self.view.alpha = 1 })
+        shadowView?.alpha = 0
+        UIView.animateWithDuration(0.3, animations: { self.shadowView?.alpha = self.shadowViewValue })
+        
         if titleTextView != nil { showTitleTextView() }
         showAllButtons()
     }
@@ -373,19 +371,16 @@ class DVActionSheet: UIViewController {
     }
     
     private func hideTitleTextViewAndAllButtons() {
-        hideTitleTextView()
+        if titleTextView != nil { hideTitleTextView() }
         hideAllButtons()
         
-        UIView.animateWithDuration(0.3, animations: {
-            self.view.alpha = 0
-            }, completion: { finished in
-                self.actionSheetState = .Hide
-                self.buttonArray.removeAll(keepCapacity: false)
-                self.view.removeFromSuperview()
-                self.removeFromParentViewController()
-                self.didMoveToParentViewController(nil)
-                self.delegate?.dvActionSheetDidDisappear?(dvActionSheet: self)
-        })
+        self.actionSheetState = .Hide
+        self.buttonArray.removeAll(keepCapacity: false)
+        self.view.removeFromSuperview()
+        self.removeFromParentViewController()
+        self.didMoveToParentViewController(nil)
+        self.delegate?.dvActionSheetDidDisappear?(dvActionSheet: self)
+  
     }
     
     private func hideTitleTextView() {
@@ -402,7 +397,8 @@ class DVActionSheet: UIViewController {
     }
     
     private func hideAllButtons() {
-        for button in buttonArray {
+        for var i=0; i<buttonArray.count; i++ {
+            let button: DVActionSheetButton = buttonArray[i] as DVActionSheetButton
             switch(presentStyle) {
             case .DropDownFromTop:
                 animateButtonToNewPosition(button, pos: CGPoint(x: button.center.x, y: -buttonHeight/2), show: false)
@@ -413,15 +409,14 @@ class DVActionSheet: UIViewController {
             case .SlideFromRight:
                 animateButtonToNewPosition(button, pos: CGPoint(x: deviceWidth + buttonWidth/2, y: button.center.y), show: false)
             }
+            buttonArray.removeAtIndex(i)
         }
+        buttonArray.removeAll()
     }
     
     private func animateButtonToNewPosition(button: DVActionSheetButton, pos: CGPoint, show: Bool) {
-        if show { shadowView?.alpha = 0 }
         UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.65, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: {
             button.center = pos
-            if show { self.shadowView?.alpha = self.shadowViewValue }
-            else { self.shadowView?.alpha = 0 }
             }, completion: { finished in
                 if !show { button.removeFromSuperview() }
                 else { self.addConstraintForButton(button, animationType: self.presentStyle) }
@@ -429,13 +424,13 @@ class DVActionSheet: UIViewController {
     }
     
     private func animateTitleTextViewToNewPosition(textView: UITextView, pos: CGPoint, show: Bool) {
-        if show { shadowView?.alpha = 0 }
         UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.65, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: {
             textView.center = pos
-            if show { self.shadowView?.alpha = self.shadowViewValue }
-            else { self.shadowView?.alpha = 0 }
             }, completion: { finished in
-                if !show { textView.removeFromSuperview() }
+                if !show {
+                    textView.removeFromSuperview()
+                    self.titleTextView = nil
+                }
                 else { self.addConstraintForTitleTextView(self.presentStyle) }
         })
     }

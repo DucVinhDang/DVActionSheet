@@ -30,7 +30,7 @@ class ViewController: UIViewController, DVActionSheetDelegate {
     }
     
     @IBAction func bottomAction(sender: AnyObject) {
-        let dvActionSheet = DVActionSheet(title: "Đây là danh sách các chức năng mà hệ thống hỗ trợ, xin mời lựa chọn", delegate: self, cancelButtonTitle: "OK", destructiveButtonTitle: "Click")
+        let dvActionSheet = DVActionSheet(title: "Đây là danh sách các chức năng mà hệ thống hỗ trợ, các chức năng đều đang trong quá trình thử nghiệm, xin mời bạn lựa chọn", delegate: self, cancelButtonTitle: "OK", destructiveButtonTitle: "Click")
         dvActionSheet.show(self, style: .DropUpFromBottom)
     }
     
@@ -40,7 +40,7 @@ class ViewController: UIViewController, DVActionSheetDelegate {
     }
     
     @IBAction func leftAction(sender: AnyObject) {
-        let dvActionSheet = DVActionSheet(title: "Đây là danh sách các chức năng mà hệ thống hỗ trợ, xin mời lựa chọn", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B","C"])
+        let dvActionSheet = DVActionSheet(title: "", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B","C"])
         dvActionSheet.show(self, style: .SlideFromLeft)
     }
 
