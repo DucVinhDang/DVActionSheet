@@ -182,12 +182,6 @@ class DVActionSheet: UIViewController {
     private func setupView() {
         view.frame = UIScreen.mainScreen().bounds
         view.backgroundColor = UIColor.clearColor()
-        view.translatesAutoresizingMaskIntoConstraints = true
-        view.autoresizingMask = UIViewAutoresizing.FlexibleHeight
-    }
-    
-    override func shouldAutorotate() -> Bool {
-        return true
     }
     
     // MARK: - Add Buttons Methods
@@ -219,6 +213,7 @@ class DVActionSheet: UIViewController {
         newTextView.textColor = UIColor.whiteColor()
         newTextView.backgroundColor = UIColor.clearColor()
         newTextView.layer.shadowOpacity = 0.8
+        newTextView.scrollEnabled = false
         
         let fixedWidth = newTextView.frame.size.width
         let newSize = newTextView.sizeThatFits(CGSize(width: fixedWidth, height: 0))
@@ -260,29 +255,33 @@ class DVActionSheet: UIViewController {
     
     // MARK: - Animation Methods
     
-    func show(target: UIViewController, style: DVActionSheetPresentStyle?) {
+    func showInView(viewToShow: UIView, style: DVActionSheetPresentStyle?) {
         if actionSheetState == .Show { return }
         delegate?.dvActionSheetWillAppear?(dvActionSheet: self)
-        target.addChildViewController(self)
-        target.view.addSubview(self.view)
-        didMoveToParentViewController(target)
-        //addVibrancyEffectToView(view)
         
-        let vView = UIView()
-        target.view.addSubview(vView)
+        if let rootVC = viewToShow.parentViewController {
+            rootVC.addChildViewController(self)
+            rootVC.view.addSubview(self.view)
+            didMoveToParentViewController(rootVC)
+            //addVibrancyEffectToView(view)
         
-        vView.translatesAutoresizingMaskIntoConstraints = false
-        target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Leading, relatedBy: .Equal, toItem: target.view, attribute: .Leading, multiplier: 1.0, constant: 0.0))
-        target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Trailing, relatedBy: .Equal, toItem: target.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0))
-        target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Top, relatedBy: .Equal, toItem: target.view, attribute: .Top, multiplier: 1.0, constant: 0.0))
-        target.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Bottom, relatedBy: .Equal, toItem: target.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
-        vView.backgroundColor = UIColor.blackColor()
+            let vView = UIView()
+            rootVC.view.addSubview(vView)
         
-        self.shadowView = vView
-        target.view.bringSubviewToFront(view)
-        self.target = target
-        presentStyle = style!
-        showAllComponents()
+            vView.translatesAutoresizingMaskIntoConstraints = false
+            rootVC.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Leading, relatedBy: .Equal, toItem: rootVC.view, attribute: .Leading, multiplier: 1.0, constant: 0.0))
+            rootVC.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Trailing, relatedBy: .Equal, toItem: rootVC.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0))
+            rootVC.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Top, relatedBy: .Equal, toItem: rootVC.view, attribute: .Top, multiplier: 1.0, constant: 0.0))
+            rootVC.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Bottom, relatedBy: .Equal, toItem: rootVC.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
+            vView.backgroundColor = UIColor.blackColor()
+        
+            rootVC.view.bringSubviewToFront(view)
+        
+            self.shadowView = vView
+            self.target = rootVC
+            presentStyle = style!
+            showAllComponents()
+        }
     }
     
     private func hideAllComponents() {
@@ -513,3 +512,18 @@ class DVActionSheet: UIViewController {
     */
 
 }
+
+extension UIView {
+    var parentViewController: UIViewController? {
+        var parentResponder: UIResponder? = self
+        while parentResponder != nil {
+            parentResponder = parentResponder!.nextResponder()
+            if let viewController = parentResponder as? UIViewController {
+                return viewController
+            }
+        }
+        return nil
+    }
+}
+
+
