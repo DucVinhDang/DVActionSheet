@@ -214,8 +214,9 @@ class DVActionSheet: UIViewController {
         newTextView.backgroundColor = UIColor.clearColor()
         newTextView.layer.shadowOpacity = 0.8
         newTextView.scrollEnabled = false
+        newTextView.editable = false
         
-        let fixedWidth = newTextView.frame.size.width
+        let fixedWidth = titleTextViewWidth
         let newSize = newTextView.sizeThatFits(CGSize(width: fixedWidth, height: 0))
         titleTextViewHeight = newSize.height
         newTextView.frame.size = CGSize(width: titleTextViewWidth, height: titleTextViewHeight!)
@@ -255,33 +256,35 @@ class DVActionSheet: UIViewController {
     
     // MARK: - Animation Methods
     
-    func showInView(viewToShow: UIView, style: DVActionSheetPresentStyle?) {
+    func showInView(target: UIViewController, style: DVActionSheetPresentStyle?) {
         if actionSheetState == .Show { return }
         delegate?.dvActionSheetWillAppear?(dvActionSheet: self)
         
-        if let rootVC = viewToShow.parentViewController {
-            rootVC.addChildViewController(self)
-            rootVC.view.addSubview(self.view)
-            didMoveToParentViewController(rootVC)
-            //addVibrancyEffectToView(view)
+        if let myTarget: UIViewController = target {
+        
+            myTarget.addChildViewController(self)
+            myTarget.view.addSubview(self.view)
+            didMoveToParentViewController(myTarget)
         
             let vView = UIView()
-            rootVC.view.addSubview(vView)
+            myTarget.view.addSubview(vView)
         
             vView.translatesAutoresizingMaskIntoConstraints = false
-            rootVC.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Leading, relatedBy: .Equal, toItem: rootVC.view, attribute: .Leading, multiplier: 1.0, constant: 0.0))
-            rootVC.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Trailing, relatedBy: .Equal, toItem: rootVC.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0))
-            rootVC.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Top, relatedBy: .Equal, toItem: rootVC.view, attribute: .Top, multiplier: 1.0, constant: 0.0))
-            rootVC.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Bottom, relatedBy: .Equal, toItem: rootVC.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
-            vView.backgroundColor = UIColor.blackColor()
+            myTarget.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Leading, relatedBy: .Equal, toItem: myTarget.view, attribute: .Leading, multiplier: 1.0, constant: 0.0))
+            myTarget.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Trailing, relatedBy: .Equal, toItem: myTarget.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0))
+            myTarget.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Top, relatedBy: .Equal, toItem: myTarget.view, attribute: .Top, multiplier: 1.0, constant: 0.0))
+            myTarget.view.addConstraint(NSLayoutConstraint(item: vView, attribute: .Bottom, relatedBy: .Equal, toItem: myTarget.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
         
-            rootVC.view.bringSubviewToFront(view)
+            vView.backgroundColor = UIColor.blackColor()
+            myTarget.view.bringSubviewToFront(view)
         
             self.shadowView = vView
-            self.target = rootVC
+            self.target = myTarget
             presentStyle = style!
             showAllComponents()
         }
+        
+        
     }
     
     private func hideAllComponents() {
@@ -289,6 +292,10 @@ class DVActionSheet: UIViewController {
         delegate?.dvActionSheetWillDisappear?(dvActionSheet: self)
         UIView.animateWithDuration(0.3, animations: {
             self.shadowView?.alpha = 0
+            if self.target?.navigationController != nil {
+                self.target?.navigationController?.navigationBar.hidden = false
+                self.target?.navigationController?.navigationBar.alpha = 1
+            }
             }, completion: { flag in
             self.shadowView?.removeFromSuperview()
             self.shadowView = nil
@@ -298,7 +305,16 @@ class DVActionSheet: UIViewController {
     
     private func showAllComponents() {
         shadowView?.alpha = 0
-        UIView.animateWithDuration(0.3, animations: { self.shadowView?.alpha = self.shadowViewValue })
+        UIView.animateWithDuration(0.3, animations: {
+            self.shadowView?.alpha = self.shadowViewValue
+            if self.target?.navigationController != nil {
+                self.target?.navigationController?.navigationBar.alpha = 0
+            }
+            }, completion: { flag in
+            if self.target?.navigationController != nil {
+                self.target?.navigationController?.navigationBar.hidden = true
+            }
+        })
         
         if titleTextView != nil { showTitleTextView() }
         showAllButtons()
@@ -498,7 +514,7 @@ class DVActionSheet: UIViewController {
     
     func buttonAction(button: DVActionSheetButton) {
         if button.index == buttonArray.count-1 { hideAllComponents() }
-        delegate?.dvActionSheet!(dvActionSheet: self, didClickButtonAtIndex: button.index!)
+        delegate?.dvActionSheet?(dvActionSheet: self, didClickButtonAtIndex: button.index!)
     }
 
     /*

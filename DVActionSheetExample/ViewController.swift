@@ -20,7 +20,7 @@ class ViewController: UIViewController, DVActionSheetDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        title = "First View"
         // Do any additional setup after loading the view.
     }
 
@@ -32,28 +32,28 @@ class ViewController: UIViewController, DVActionSheetDelegate {
     
     @IBAction func moveToNewUIAction(sender: AnyObject) {
         let secondVC = SecondViewController(nibName: "SecondViewController", bundle: nil)
-        self.presentViewController(secondVC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(secondVC, animated: true)
     }
     
     
     @IBAction func bottomAction(sender: AnyObject) {
         let dvActionSheet = DVActionSheet(title: "Đây là danh sách các chức năng mà hệ thống hỗ trợ, các chức năng đều đang trong quá trình thử nghiệm, xin mời bạn lựa chọn", delegate: self, cancelButtonTitle: "OK", destructiveButtonTitle: "Click")
-        dvActionSheet.showInView(self.view, style: .DropUpFromBottom)
+        dvActionSheet.showInView(self, style: .DropUpFromBottom)
     }
     
     @IBAction func topAction(sender: AnyObject) {
         let dvActionSheet = DVActionSheet(title: "Đây là danh sách các chức năng mà hệ thống hỗ trợ, xin mời lựa chọn", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B","C"])
-        dvActionSheet.showInView(self.view, style: .DropDownFromTop)
+        dvActionSheet.showInView(self, style: .DropDownFromTop)
     }
     
     @IBAction func leftAction(sender: AnyObject) {
         let dvActionSheet = DVActionSheet(title: "", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B","C"])
-        dvActionSheet.showInView(self.view, style: .SlideFromLeft)
+        dvActionSheet.showInView(self, style: .SlideFromLeft)
     }
 
     @IBAction func rightAction(sender: AnyObject) {
         let dvActionSheet = DVActionSheet(title: "Đây là danh sách các chức năng mà hệ thống hỗ trợ, xin mời lựa chọn", delegate: self, cancelButtonTitle: "Exit", destructiveButtonTitle: "Touch it now", otherButtonTitles: ["A","B"])
-        dvActionSheet.showInView(self.view, style: .SlideFromRight)
+        dvActionSheet.showInView(self, style: .SlideFromRight)
     }
     
     // MARK: - DVActionSheet Delegate

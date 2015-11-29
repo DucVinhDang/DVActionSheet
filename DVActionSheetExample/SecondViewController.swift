@@ -23,7 +23,7 @@ class SecondViewController: UIViewController, DVActionSheetDelegate, UITableView
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        title = "Second View"
         // Do any additional setup after loading the view.
         
     }
@@ -34,25 +34,8 @@ class SecondViewController: UIViewController, DVActionSheetDelegate, UITableView
     }
     
     @IBAction func handleBack(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func dvActionSheet(dvActionSheet dvActionSheet: DVActionSheet, didClickButtonAtIndex: Int) {
-        switch(didClickButtonAtIndex) {
-        case 0:
-            print("Clicked on Destructive button")
-        case 1:
-            print("Clicked on button at index \(didClickButtonAtIndex)")
-        case 2:
-            print("Clicked on button at index \(didClickButtonAtIndex)")
-        case 3:
-            print("Clicked on button at index \(didClickButtonAtIndex)")
-        case 4:
-            print("Clicked on Cancel button")
-            
-        default:
-            break;
-        }
+        let dvActionSheet = DVActionSheet(title: "Bạn có muốn quay lại không?", delegate: self, cancelButtonTitle: "Huỷ", destructiveButtonTitle: "Đồng ý")
+        dvActionSheet.showInView(self, style: .DropUpFromBottom)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -67,7 +50,25 @@ class SecondViewController: UIViewController, DVActionSheetDelegate, UITableView
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let dvActionSheet = DVActionSheet(title: "Đây là danh sách các chức năng mà hệ thống hỗ trợ, các chức năng đều đang trong quá trình thử nghiệm, xin mời bạn lựa chọn", delegate: self, cancelButtonTitle: "OK", destructiveButtonTitle: "Click")
-        dvActionSheet.showInView(self.view, style: .DropUpFromBottom)
+        dvActionSheet.showInView(self, style: .DropUpFromBottom)
+    }
+    
+    func dvActionSheet(dvActionSheet dvActionSheet: DVActionSheet, didClickButtonAtIndex: Int) {
+        switch(didClickButtonAtIndex) {
+        case 0:
+            self.navigationController?.popViewControllerAnimated(true)
+        case 1:
+            print("Clicked on button at index \(didClickButtonAtIndex)")
+        case 2:
+            print("Clicked on button at index \(didClickButtonAtIndex)")
+        case 3:
+            print("Clicked on button at index \(didClickButtonAtIndex)")
+        case 4:
+            print("Clicked on Cancel button")
+            
+        default:
+            break;
+        }
     }
 
     
