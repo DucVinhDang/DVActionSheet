@@ -424,9 +424,7 @@ class DVActionSheet: UIViewController {
             case .SlideFromRight:
                 animateButtonToNewPosition(button, pos: CGPoint(x: deviceWidth + buttonWidth/2, y: button.center.y), show: false)
             }
-            buttonArray.removeAtIndex(i)
         }
-        buttonArray.removeAll()
     }
     
     private func animateButtonToNewPosition(button: DVActionSheetButton, pos: CGPoint, show: Bool) {
@@ -513,7 +511,8 @@ class DVActionSheet: UIViewController {
     // MARK: - Button Methods
     
     func buttonAction(button: DVActionSheetButton) {
-        if button.index == buttonArray.count-1 { hideAllComponents() }
+//        if button.index == buttonArray.count-1 { hideAllComponents() }
+        hideAllComponents()
         delegate?.dvActionSheet?(dvActionSheet: self, didClickButtonAtIndex: button.index!)
     }
 
