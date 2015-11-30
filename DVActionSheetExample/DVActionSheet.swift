@@ -164,19 +164,6 @@ class DVActionSheet: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-//    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-//        if self.actionSheetState == .Show {
-//            if self.presentStyle == .SlideFromLeft || self.presentStyle == .SlideFromRight {
-//                deviceWidth = UIScreen.mainScreen().bounds.size.height
-//                deviceHeight = UIScreen.mainScreen().bounds.size.width
-//                println("\(deviceWidth) + \(deviceHeight)")
-//                //view.removeConstraints(view.constraints())
-//                setNewPositionForButtonsWhenRotateDevice()
-//            }
-//        }
-//        
-//    }
-    
     // MARK: - Setup View Methods
     
     private func setupView() {
@@ -292,6 +279,7 @@ class DVActionSheet: UIViewController {
         delegate?.dvActionSheetWillDisappear?(dvActionSheet: self)
         UIView.animateWithDuration(0.3, animations: {
             self.shadowView?.alpha = 0
+            self.view.alpha = 0
             if self.target?.navigationController != nil {
                 self.target?.navigationController?.navigationBar.hidden = false
                 self.target?.navigationController?.navigationBar.alpha = 1
@@ -299,8 +287,21 @@ class DVActionSheet: UIViewController {
             }, completion: { flag in
             self.shadowView?.removeFromSuperview()
             self.shadowView = nil
+            self.actionSheetState = .Hide
+                
+            for button in self.buttonArray {
+                button.removeFromSuperview()
+            }
+            self.titleTextView?.removeFromSuperview()
+            self.titleTextView = nil
+            self.buttonArray.removeAll(keepCapacity: false)
+            self.view.removeFromSuperview()
+            self.removeFromParentViewController()
+            self.didMoveToParentViewController(nil)
+            self.delegate?.dvActionSheetDidDisappear?(dvActionSheet: self)
+
         })
-        hideTitleTextViewAndAllButtons()
+        //hideTitleTextViewAndAllButtons()
     }
     
     private func showAllComponents() {
@@ -385,47 +386,50 @@ class DVActionSheet: UIViewController {
         delegate?.dvActionSheetDidAppear?(dvActionSheet: self)
     }
     
-    private func hideTitleTextViewAndAllButtons() {
-        if titleTextView != nil { hideTitleTextView() }
-        hideAllButtons()
-        
-        self.actionSheetState = .Hide
-        self.buttonArray.removeAll(keepCapacity: false)
-        self.view.removeFromSuperview()
-        self.removeFromParentViewController()
-        self.didMoveToParentViewController(nil)
-        self.delegate?.dvActionSheetDidDisappear?(dvActionSheet: self)
-  
-    }
+//    private func hideTitleTextViewAndAllButtons() {
+//        //if titleTextView != nil { hideTitleTextView() }
+//        //hideAllButtons()
+//        
+//        UIView.animateWithDuration(0.3, animations: {
+//            self.view.alpha = 0
+//            }, completion: { finished in
+//                self.actionSheetState = .Hide
+//                self.buttonArray.removeAll(keepCapacity: false)
+//                self.view.removeFromSuperview()
+//                self.removeFromParentViewController()
+//                self.didMoveToParentViewController(nil)
+//                self.delegate?.dvActionSheetDidDisappear?(dvActionSheet: self)
+//        })
+//    }
     
-    private func hideTitleTextView() {
-        switch(presentStyle) {
-        case .DropDownFromTop:
-            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: titleTextView!.center.x, y: -titleTextViewHeight!/2), show: false)
-        case .DropUpFromBottom:
-            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: titleTextView!.center.x, y: deviceHeight + titleTextViewHeight!/2), show: false)
-        case .SlideFromLeft:
-            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: -titleTextViewWidth/2, y: titleTextView!.center.y), show: false)
-        case .SlideFromRight:
-            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: deviceWidth + titleTextViewWidth/2, y: titleTextView!.center.y), show: false)
-        }
-    }
+//    private func hideTitleTextView() {
+//        switch(presentStyle) {
+//        case .DropDownFromTop:
+//            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: titleTextView!.center.x, y: -titleTextViewHeight!/2), show: false)
+//        case .DropUpFromBottom:
+//            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: titleTextView!.center.x, y: deviceHeight + titleTextViewHeight!/2), show: false)
+//        case .SlideFromLeft:
+//            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: -titleTextViewWidth/2, y: titleTextView!.center.y), show: false)
+//        case .SlideFromRight:
+//            animateTitleTextViewToNewPosition(titleTextView!, pos: CGPoint(x: deviceWidth + titleTextViewWidth/2, y: titleTextView!.center.y), show: false)
+//        }
+//    }
     
-    private func hideAllButtons() {
-        for var i=0; i<buttonArray.count; i++ {
-            let button: DVActionSheetButton = buttonArray[i] as DVActionSheetButton
-            switch(presentStyle) {
-            case .DropDownFromTop:
-                animateButtonToNewPosition(button, pos: CGPoint(x: button.center.x, y: -buttonHeight/2), show: false)
-            case .DropUpFromBottom:
-                animateButtonToNewPosition(button, pos: CGPoint(x: button.center.x, y: deviceHeight + buttonHeight/2), show: false)
-            case .SlideFromLeft:
-                animateButtonToNewPosition(button, pos: CGPoint(x: -buttonWidth/2, y: button.center.y), show: false)
-            case .SlideFromRight:
-                animateButtonToNewPosition(button, pos: CGPoint(x: deviceWidth + buttonWidth/2, y: button.center.y), show: false)
-            }
-        }
-    }
+//    private func hideAllButtons() {
+//        for var i=0; i<buttonArray.count; i++ {
+//            let button: DVActionSheetButton = buttonArray[i] as DVActionSheetButton
+//            switch(presentStyle) {
+//            case .DropDownFromTop:
+//                animateButtonToNewPosition(button, pos: CGPoint(x: button.center.x, y: -buttonHeight/2), show: false)
+//            case .DropUpFromBottom:
+//                animateButtonToNewPosition(button, pos: CGPoint(x: button.center.x, y: deviceHeight + buttonHeight/2), show: false)
+//            case .SlideFromLeft:
+//                animateButtonToNewPosition(button, pos: CGPoint(x: -buttonWidth/2, y: button.center.y), show: false)
+//            case .SlideFromRight:
+//                animateButtonToNewPosition(button, pos: CGPoint(x: deviceWidth + buttonWidth/2, y: button.center.y), show: false)
+//            }
+//        }
+//    }
     
     private func animateButtonToNewPosition(button: DVActionSheetButton, pos: CGPoint, show: Bool) {
         UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.65, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: {
