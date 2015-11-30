@@ -193,7 +193,7 @@ class DVActionSheet: UIViewController {
     }
     
     private func addTitleTextView(title title: String) {
-        let newTextView = UITextView(frame: CGRect(x: (deviceWidth-titleTextViewWidth)/2, y: deviceHeight, width: titleTextViewWidth, height: 0))
+        let newTextView = UITextView(frame: CGRect(x: (deviceWidth-titleTextViewWidth)/2, y: deviceHeight, width: titleTextViewWidth, height: 40))
         newTextView.text = title
         newTextView.textAlignment = NSTextAlignment.Center
         newTextView.font = UIFont(name: "Helvetica", size: 17)
@@ -206,7 +206,7 @@ class DVActionSheet: UIViewController {
         let fixedWidth = titleTextViewWidth
         let newSize = newTextView.sizeThatFits(CGSize(width: fixedWidth, height: 0))
         titleTextViewHeight = newSize.height
-        newTextView.frame.size = CGSize(width: titleTextViewWidth, height: titleTextViewHeight!)
+        newTextView.frame.size.height = titleTextViewHeight!
         self.view.addSubview(newTextView)
         self.titleTextView = newTextView
     }
